@@ -10,7 +10,7 @@ with open('requirements.txt', 'rb') as req_file:
 print(REQUIREMENTS)
 
 setup(
-    name='File Crawler',
+    name='FileCrawler',
     version='0.0.1',
     description='File crawling and indexing utility',
     author='Filip Hornak',
@@ -18,11 +18,14 @@ setup(
     url='http://None',
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    package_data={'filecrawl': 'types/*.json'},
+    package_data={'': 'mappings/*.json'},
     include_package_data=True,
     zip_safe=False,
     install_requires=REQUIREMENTS,
-    scripts=['bin/crawler.py'],
+    scripts=[
+        'bin/crawler.py',
+        'bin/setup_env.py'
+    ],
     setup_requires=['pytest-runner'],
     test_requires=['pytest', 'pytest-cov', 'pytest-pylint'],
     test_suite='py.test',
@@ -39,6 +42,7 @@ setup(
     classifiers=[
         'Development Status :: 1 - Planning',
         'Intended Audience :: Developers',
+        'Intended Audience :: End Users/Desktop',
         'Programing Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',

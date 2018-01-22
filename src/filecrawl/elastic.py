@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from elasticsearch import Elasticsearch
+from .config import ELASTIC_HOSTS
 
 
 ES_CLIENT = None
@@ -29,15 +30,28 @@ def get_es_client():
     """
     global ES_CLIENT
     if ES_CLIENT is None:
-        ES_CLIENT = Elasticsearch(hosts=['localhost'])
+        ES_CLIENT = Elasticsearch(hosts=ELASTIC_HOSTS)
     return ES_CLIENT
 
 
 def put_mappings():
     import json
-    import os.path
+    from pathlib import Path
     client = get_es_client()
-    with open(os.path.join(os.path.dirname(__file__), '../../types/mapping.json'), 'rb') as mapping_file:
-        mapping = json.loads(str(mapping_file.read(), encoding='utf-8'))
-        client.indices.create('files')
-        client.indices.put_mapping('basic', mapping, index='files')
+    mappings = get_mappings()
+    for mapping in mappings:
+        mp = Path(mapping)
+        name = mp.name[-len(mp.suffix):]
+        index, doc_type = name.split('_', maxsplit=1)
+        with open(mapping, 'rb') as mapping_fd:
+            mapping_data = json.loads(str(mapping_fd.read(), encoding='utf-8'))
+            client.indices.create(index)
+            client.indices.put_mapping(doc_type, mapping_data, index=index)
+
+
+def get_mappings():
+    from os.path import join, dirname, normpath
+    import os
+    dir_path = normpath(join(dirname(__file__), '../../mappings/'))
+    mappings = join(dir_path, [f for f in os.listdir(dir_path) if f.endswith('.json')])
+    return mappings

@@ -10,7 +10,6 @@ from filecrawl.typeguess import (
 from filecrawl.utils import (
     filename_to_nametags
 )
-from filecrawl.elastic import put_mappings
 from filecrawl.es_models import FileIndexBuilder
 
 
@@ -18,7 +17,6 @@ def crawl(superpath):
     for superpath, dirs, files in walk(superpath):
         for file in files:
             full_path = join(superpath, file)
-            print('Indexing:', full_path)
             fi = FileIndexBuilder(full_path)
 
             fi.mime_type = guess_mimetype(full_path)
@@ -32,5 +30,4 @@ def crawl(superpath):
 
 
 if __name__ == '__main__':
-    put_mappings()
     crawl('/home/filip/Dokumenty')

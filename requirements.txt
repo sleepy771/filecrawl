@@ -3,3 +3,4 @@ unidecode
 beautifulsoup4
 epub_meta
 PyPDF2
+hachoir3
