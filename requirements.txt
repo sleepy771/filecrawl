@@ -1,0 +1,5 @@
+elasticsearch>=6.0.0,<7.0.0
+unidecode
+beautifulsoup4
+epub_meta
+PyPDF2

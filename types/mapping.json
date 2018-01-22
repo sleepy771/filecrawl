@@ -1,0 +1,56 @@
+{
+  "properties": {
+    "file_path": {
+      "type": "keyword",
+      "index": false
+    },
+    "file_name": {
+      "type": "text",
+      "fields": {
+        "raw": {
+          "type": "keyword"
+        },
+        "english": {
+          "type": "text",
+          "analyzer": "english"
+        }
+      }
+    },
+    "type": {
+      "type": "keyword"
+    },
+    "subtype": {
+      "type": "keyword"
+    },
+    "meta_data": {
+      "type": "nested",
+      "dynamic": true,
+      "properties": {
+        "authors": {
+          "type": "keyword"
+        },
+        "title": {
+          "type": "text",
+          "fields": {
+            "raw": {
+              "type": "keyword"
+            }
+          }
+        },
+        "publication_date": {
+          "type": "date"
+        }
+      }
+    },
+    "tags": {
+      "type": "keyword"
+    },
+    "category": {
+      "type": "keyword"
+    },
+    "modification": {
+      "type": "date",
+      "format": "epoch_millis"
+    }
+  }
+}
