@@ -41,7 +41,9 @@ _ASSOCIATED_TYPES = {
     ('.log',): 'text/x-log',
     ('.gz',): 'application/gzip',
     ('.bz2',): 'application/bzip2',
-    ('.tar', '.bz2'): 'application/tar+bzip2'
+    ('.tar', '.bz2'): 'application/tar+bzip2',
+    ('.ogg',): 'video/theora',
+    ('.ogv',): ''
 }
 
 

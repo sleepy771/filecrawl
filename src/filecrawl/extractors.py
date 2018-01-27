@@ -3,6 +3,10 @@ import re
 
 from epub_meta import get_epub_metadata
 from PyPDF2 import PdfFileReader
+from hachoir.core.tools import makeUnicode
+from hachoir.parser import createParser
+from hachoir.metadata import extractMetadata
+from hachoir.metadata.metadata import Metadata
 
 
 DATE_TIME_REGEX = re.compile(
@@ -32,6 +36,39 @@ def epub_metadata_extractor(filepath):
     return meta_data
 
 
+def hachoir_metadata_extractor(filepath):
+    parser = createParser(filepath)
+
+    if not parser:
+        raise Exception('Parser not found')
+
+    with parser:
+        try:
+            metadata = extractMetadata(parser)
+        except Exception as err:
+            print('Some error occured: %s', err)
+            metadata = None
+
+        meta_dct = extract_hachoir_metatdata_dictionary(metadata)
+        print(meta_dct)
+
+
+def extract_hachoir_metatdata_dictionary(metadata, title=None):
+    if not metadata:
+        return {}
+    if not title:
+        title = metadata.header
+    data = {title: {}}
+    for d in metadata:
+        if not d.values:
+            continue
+        data[title][d.key] = []
+        for item in d.values:
+            data[title][d.key] = makeUnicode(item.value)
+    return data
+
+
+
 def is_invalid_date(datetime_str):
     return DATE_TIME_REGEX.match(datetime_str) is None
 
@@ -52,3 +89,7 @@ def pdf_metadata_extractor(filepath):
             'subject': pdf_info.subject
         }
         return metadata
+
+
+if __name__ == '__main__':
+    hachoir_metadata_extractor('/home/filip/Stiahnuté/big_buck_bunny_1080p_stereo.ogg')
